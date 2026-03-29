@@ -2,9 +2,9 @@
 
 Check off tasks as you complete them.
 
-- [ ] **Tokens, fonts, and layout metadata** — Map Stitch palette to Tailwind/CSS tokens; switch `layout.tsx` to Noto Serif + Plus Jakarta Sans; set site metadata; align light theme with Final Polish (drop or scope dark mode if needed).
+- [x] **Tokens, fonts, and layout metadata** — Map Stitch palette to Tailwind/CSS tokens; switch `layout.tsx` to Noto Serif + Plus Jakarta Sans; set site metadata; align light theme with Final Polish (drop or scope dark mode if needed).
 
-- [ ] **Section components** — Build hero, modalities, about/practitioner, and contact shell in `src/components/`; compose them in `src/app/page.tsx` in Stitch order with anchor IDs for in-page navigation.
+- [x] **Section components** — Build hero, modalities, about/practitioner, and contact shell in `src/components/`; compose them in `src/app/page.tsx` in Stitch order with anchor IDs for in-page navigation.
 
 - [ ] **Contact form, server action, and SES** — Add `contact-form.tsx` (client, `useActionState`), `actions/contact.ts` (validate + SES), wired to architecture/SST as in `docs/architecture.md`.
 
