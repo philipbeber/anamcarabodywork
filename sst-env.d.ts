@@ -6,9 +6,17 @@
 
 declare module "sst" {
   export interface Resource {
+    "ContactInbox": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "MyWeb": {
       "type": "sst.aws.Nextjs"
       "url": string
+    }
+    "OutboundSender": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
   }
 }

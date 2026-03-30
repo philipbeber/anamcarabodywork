@@ -48,7 +48,7 @@ Exact prompts and filenames follow the current SST docs; pinning `sst` to a spec
 
 1. **Static and server-rendered UI** — Next.js serves the single (or primary) page via SST’s AWS deployment for Next.js (per SST’s `Nextjs`-style component for the version in use).
 2. **Form submission** — Browser posts to a **server action or route handler** in Next.js. That code uses **Amazon SES** (via AWS SDK) to send email to the owner.
-3. **SST `Email` component** — Configure `sst.aws.Email` (or equivalent) for a verified sender in SES, and **link** it to the Next/server runtime so the app can send mail with minimal secret wiring. Recipient is the business owner’s inbox.
+3. **SES + secrets** — Configure a verified **From** address (via `sst.Secret` `OutboundSender` and IAM `permissions` on `Nextjs`, or `sst.aws.Email` when SST manages the identity). Recipient is the business owner’s inbox (`ContactInbox` secret).
 
 Details (verified domain vs single address, sandbox vs production SES, spam protection) are implementation tasks, not fixed here.
 
@@ -56,15 +56,15 @@ Details (verified domain vs single address, sandbox vs production SES, spam prot
 
 | Path | Purpose |
 |------|---------|
-| `sst.config.ts` | `sst.aws.Email` (`OutboundEmail`), `sst.Secret` (`ContactInbox`), `sst.aws.Nextjs` (`MyWeb`) with `link`. |
+| `sst.config.ts` | `sst.Secret` (`OutboundSender`, `ContactInbox`), `sst.aws.Nextjs` (`MyWeb`) with `link` + SES `permissions`. |
 | `src/app/page.tsx` | Single landing page and contact section. |
 | `src/app/actions/contact.ts` | Server action: validates input, sends mail via SES (`@aws-sdk/client-sesv2`). |
 | `src/components/contact-form.tsx` | Client form using `useActionState`. |
-| `src/sst-resource.d.ts` | TypeScript augmentation for `Resource.OutboundEmail` / `Resource.ContactInbox`. |
+| `src/sst-resource.d.ts` | TypeScript augmentation for `Resource.OutboundSender` / `Resource.ContactInbox`. |
 
 ## Setup before deploy
 
-1. **SES sender** — In `sst.config.ts`, set `sender` on `OutboundEmail` to an identity you will verify in Amazon SES (single address or domain).
+1. **SES From address** — Use a verified identity in Amazon SES. Default is the `OutboundSender` secret placeholder in `sst.config.ts`, or override with `npx sst secret set OutboundSender "verified@example.com"`.
 2. **Inbox secret** — Set the address that receives form submissions (can match the sender or be different):
 
    ```bash
