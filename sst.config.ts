@@ -21,6 +21,13 @@ export default $config({
     const contactInbox = new sst.Secret("ContactInbox");
 
     new sst.aws.Nextjs("MyWeb", {
+      domain:
+        $app.stage === "production"
+          ? {
+              name: "anamcarabodywork.com",
+              redirects: ["www.anamcarabodywork.com"],
+            }
+          : undefined,
       link: [outboundSender, contactInbox],
       permissions: [
         {
