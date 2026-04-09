@@ -11,6 +11,14 @@ export default $config({
     };
   },
   async run() {
+    // Verified SES addresses created outside SST often have no configuration set. SST's
+    // `Email.get()` still expects one and fails Pulumi with "Expected an ID" for the config set.
+    // Use a Secret for the From address + explicit SES permissions instead.
+    const outboundSender = new sst.Secret(
+      "OutboundSender"
+    );
+    const contactInbox = new sst.Secret("ContactInbox");
+
     new sst.aws.Nextjs("MyWeb", {
       domain:
         $app.stage === "production"
@@ -19,6 +27,13 @@ export default $config({
               redirects: ["www.anamcarabodywork.com"],
             }
           : undefined,
+      link: [outboundSender, contactInbox],
+      permissions: [
+        {
+          actions: ["ses:SendEmail", "ses:SendRawEmail"],
+          resources: ["*"],
+        },
+      ],
     });
   },
 });
