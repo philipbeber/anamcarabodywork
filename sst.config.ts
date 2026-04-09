@@ -15,8 +15,7 @@ export default $config({
     // `Email.get()` still expects one and fails Pulumi with "Expected an ID" for the config set.
     // Use a Secret for the From address + explicit SES permissions instead.
     const outboundSender = new sst.Secret(
-      "OutboundSender",
-      "philip.beber@gmail.com",
+      "OutboundSender"
     );
     const contactInbox = new sst.Secret("ContactInbox");
 
